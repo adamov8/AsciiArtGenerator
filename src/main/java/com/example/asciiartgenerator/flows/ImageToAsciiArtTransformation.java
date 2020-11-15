@@ -35,16 +35,10 @@ public class ImageToAsciiArtTransformation {
     }
 
     public Message<String> transform(File source) {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(baos);
         ImageBanner imageBanner = new ImageBanner(new FileSystemResource(new File(source.getPath())));
         imageBanner.printBanner(environment, getClass(), printStream);
-
-        // for testing
-//        Message<File> messageFile = MessageBuilder.withPayload(source)
-//                .build();
-//        throw new MessageTransformationException(messageFile, "test");
 
         return MessageBuilder.withPayload(new String(baos.toByteArray()))
                 .setHeader(FileHeaders.FILENAME, source.getAbsoluteFile().getName().split("\\.")[0] + ".txt")

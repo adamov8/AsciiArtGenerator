@@ -14,13 +14,15 @@ import java.io.File;
 @Component
 public class Inbound {
 
+    private static final String JPG_PNG = ".*\\.(jpg|png)";
+
     @Value("${inputDirectory:source}")
     private File in;
 
     @Bean
     IntegrationFlow inboundFlow() {
         return IntegrationFlows
-                .from(Files.inboundAdapter(in).autoCreateDirectory(true).preventDuplicates(true).regexFilter(".*\\.(jpg|png)"))
+                .from(Files.inboundAdapter(in).autoCreateDirectory(true).preventDuplicates(true).regexFilter(JPG_PNG))
                 .log(LoggingHandler.Level.WARN, getClass().getName(), file -> "Found new file:" + file.getHeaders().get("file_name") + " in " + in.getPath())
                 .channel(Channel.INBOUND_CHANNEL)
                 .get();
